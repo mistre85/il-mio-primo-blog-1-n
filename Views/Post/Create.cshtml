@@ -42,6 +42,18 @@
                     </select>
                     <span asp-validation-for="Post.CategoryId" class="text-danger"></span>
                 </div>
+                <div class="mb-3">
+                    <strong>Tag:</strong>
+                    <select multiple="multiple"
+                        asp-for="SelectedTags"
+                        size="10"
+                            class="form-control mb-2 mr-sm-2 ml-sm-3 leftList">
+                        @foreach (Tag tag in Model.Tags)
+                        {
+                            <option value="@tag.Id">@tag.Title</option>
+                        }
+                        </select>
+                </div>
                 <div class="text-end">
                     <input type="submit" class="btn btn-small btn-success" value="Salva">
                 </div>

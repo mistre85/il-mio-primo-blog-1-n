@@ -5,6 +5,7 @@ using NetCore.Models;
 using NetCore_01.Models;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Net.Mime;
 
 namespace NetCore.Controllers
 {
@@ -19,7 +20,7 @@ namespace NetCore.Controllers
         {
             using (BlogContext context = new BlogContext())
             {
-                List<Post> posts = context.Posts.Include("Category").ToList();
+                List<Post> posts = context.Posts.Include("Category").Include("Tags").ToList() ;
 
                 return View("Index", posts);
             }
@@ -32,7 +33,7 @@ namespace NetCore.Controllers
             {
                 //Post postFound = context.Posts.Where(post => post.Id == id).Include("Category").FirstOrDefault();
                 Post postFound = context.Posts.Where(post => post.Id == id)
-                    .Include(post => post.Category).FirstOrDefault();
+                    .Include(post => post.Category).Include(post => post.Tags).FirstOrDefault();
                     
                 if (postFound == null)
                 {
@@ -52,8 +53,11 @@ namespace NetCore.Controllers
 
             //postsCategories.Post è già a posto? no ...
             //postsCategories.Post = new Post(); ...  dobbiamo inizializzarlo se non lo fa il costruttore
+            BlogContext context = new BlogContext();
 
-            postsCategories.Categories = new BlogContext().Categories.ToList();
+            postsCategories.Categories = context.Categories.ToList();
+
+            postsCategories.Tags = context.Tags.ToList();
 
             return View(postsCategories);
         }
@@ -67,20 +71,31 @@ namespace NetCore.Controllers
             if (!ModelState.IsValid)
             {
                 formData.Categories = context.Categories.ToList();
+                formData.Tags = context.Tags.ToList();
                 return View("Create", formData);
             }
 
+            //recupero tag reali dal db
+            //List<Tag> selectedTags = new List<Tag>();
 
-            //Post postToCreate = new Post();
+            //formData.Post.Tags = new List<Tag>();
+            //foreach(int tagId in formData.SelectedTags)
+            //{
+            //    Tag tag = context.Tags.Where(tag => tag.Id == tagId).FirstOrDefault();
+            //    //todo: check null
+            //    //selectedTags.Add(tag);
+            //    formData.Post.Tags.Add(tag);
+            //}
+            //fine recupero tag
 
-            //postToCreate.Title = formData.Post.Title;
-            //postToCreate.Description = formData.Post.Description;
-            //postToCreate.Image = formData.Post.Image;
-            //postToCreate.CategoryId = formData.Post.CategoryId;
+            formData.Post.Tags = context.Tags.Where(tag => formData.SelectedTags.Contains(tag.Id)).ToList<Tag>();
 
-            context.Posts.Add(formData.Post);
+            //assegno al POST che l'utente ha creato
+            //i tag che ha selezionato
+           // formData.Post.Tags = selectedTags;
 
-        
+            //context.Posts.Add(formData.Post);
+
             context.SaveChanges();
 
             return RedirectToAction("Index");
@@ -92,7 +107,8 @@ namespace NetCore.Controllers
         {
             using (BlogContext context = new BlogContext())
             {
-                Post postToEdit = context.Posts.Where(post => post.Id == id).FirstOrDefault();
+                Post postToEdit = context.Posts.Include("Category").Include("Tags").
+                    Where(post => post.Id == id).FirstOrDefault();
 
                 if (postToEdit == null)
                 {
@@ -103,6 +119,7 @@ namespace NetCore.Controllers
 
                 postsCategories.Post = postToEdit; //model del db
                 postsCategories.Categories = context.Categories.ToList(); //<select che serve alla vista
+                postsCategories.Tags = context.Tags.ToList();
 
                 return View(postsCategories);
 
@@ -118,21 +135,18 @@ namespace NetCore.Controllers
                 if (!ModelState.IsValid)
                 {
                     formData.Categories = context.Categories.ToList();
+                    formData.Tags = context.Tags.ToList();
                     return View("Update", formData);
                 }
 
-                //Post postToEdit = context.Posts.Where(post => post.Id == id).FirstOrDefault();
+                Post post = context.Posts.Where(post => post.Id == id).Include("Tags").FirstOrDefault();
 
-
-                //aggiorniamo i campi con i nuovi valori
-                //postToEdit.Title = formData.Post.Title;
-                //postToEdit.Description = formData.Post.Description;
-                //postToEdit.Image = formData.Post.Image;
-                //postToEdit.CategoryId = formData.Post.CategoryId;
-
-                formData.Post.Id = id;
-                context.Posts.Update(formData.Post);
-
+                post.Title = formData.Post.Title;
+                post.Description = formData.Post.Description;
+                post.CategoryId = formData.Post.CategoryId;
+                post.Tags = context.Tags.Where(tag => formData.SelectedTags.Contains(tag.Id)).ToList<Tag>();
+             
+               
                 context.SaveChanges();
 
                 return RedirectToAction("Index");

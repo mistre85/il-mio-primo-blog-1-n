@@ -1,4 +1,5 @@
-﻿using NetCore_01.Utils.Validations;
+﻿using NetCore_01.Models;
+using NetCore_01.Utils.Validations;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -23,6 +24,8 @@ namespace NetCore.Models
 
         public int? CategoryId { get; set; }
         public Category? Category { get; set; }
+
+        public List<Tag>? Tags { get; set; }
 
         public Post()
         {

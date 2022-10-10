@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NetCore.Models;
+using NetCore_01.Models;
 
 namespace NetCore.Data
 {
@@ -9,6 +10,8 @@ namespace NetCore.Data
         public DbSet<Post> Posts { get; set; }
 
         public DbSet<Category> Categories { get; set; }
+
+        public DbSet<Tag> Tags { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

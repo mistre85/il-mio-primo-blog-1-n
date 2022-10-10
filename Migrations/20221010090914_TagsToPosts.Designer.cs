@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetCore.Data;
 
@@ -11,9 +12,10 @@ using NetCore.Data;
 namespace NetCore_01.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    partial class BlogContextModelSnapshot : ModelSnapshot
+    [Migration("20221010090914_TagsToPosts")]
+    partial class TagsToPosts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +38,7 @@ namespace NetCore_01.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags", (string)null);
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("NetCore.Models.Category", b =>
@@ -53,7 +55,7 @@ namespace NetCore_01.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("NetCore.Models.Post", b =>
@@ -84,7 +86,7 @@ namespace NetCore_01.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("PostTag", b =>
@@ -99,7 +101,7 @@ namespace NetCore_01.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("PostTag", (string)null);
+                    b.ToTable("PostTag");
                 });
 
             modelBuilder.Entity("NetCore.Models.Post", b =>

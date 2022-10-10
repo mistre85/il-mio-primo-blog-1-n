@@ -41,6 +41,25 @@
                     </select>
                     <span asp-validation-for="Post.CategoryId" class="text-danger"></span>
                 </div>
+                <div class="mb-3">
+                    <strong>Tag:</strong>
+                    <select asp-for="SelectedTags"
+                            multiple="multiple"
+                            size="10"
+                            class="form-control mb-2 mr-sm-2 ml-sm-3 leftList"
+                            >
+                        @foreach (Tag tag in Model.Tags)
+                        {
+                            @if(Model.Post.Tags.Contains(tag)){
+                                 <option selected value="@tag.Id">@tag.Title</option>
+                            }else{
+
+                                 <option value="@tag.Id">@tag.Title</option>
+                            }
+                           
+                        }
+                    </select>
+                </div>
                 <div class="text-end">
                     <input type="submit" class="btn btn-small btn-success" value="Salva">
                 </div>

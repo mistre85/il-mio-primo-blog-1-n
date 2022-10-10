@@ -12,11 +12,18 @@ namespace NetCore_01.Models
         //action [view] è proprio la <select .. option...
         public List<Category> Categories { get; set; }
 
+        //action [view] è proprio la <select .. option...
+        public List<Tag> Tags { get; set; }
+
+        //action [post] la lista dei tag che vengono selezionati dall'utente
+        public List<int> SelectedTags { get; set; }
 
         public PostsCategories()
         {
             Post = new Post();
             Categories = new List<Category>();
+            Tags = new List<Tag>();
+            SelectedTags = new List<int>();
         }
     }
 }

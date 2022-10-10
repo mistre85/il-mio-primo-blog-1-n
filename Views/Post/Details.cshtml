@@ -23,6 +23,17 @@
                 <strong>Categoria:</strong>
                 @Model.Category.Title
             </p>
+            <p>
+                <strong>Tag:</strong>
+                @foreach (Tag tag in Model.Tags)
+                {
+                    <div>
+                        <label>
+                            @tag.Title
+                        </label>
+                    </div>
+                }
+            </p>
         </div>
     </div>
 </div>
