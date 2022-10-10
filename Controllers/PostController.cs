@@ -94,7 +94,7 @@ namespace NetCore.Controllers
             //i tag che ha selezionato
            // formData.Post.Tags = selectedTags;
 
-            //context.Posts.Add(formData.Post);
+            context.Posts.Add(formData.Post);
 
             context.SaveChanges();
 
